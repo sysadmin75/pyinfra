@@ -1,0 +1,37 @@
+name: "Build `pyinfra` Binary"
+
+on:
+  push:
+    branches:
+      - current
+      - next
+  pull_request:
+
+jobs:
+  Test:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-18.04
+            python-version: 3.9
+          - os: macos-10.15
+            python-version: 3.9
+          - os: windows-2019
+            python-version: 3.9
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install
+        run: pip install '.[build]'
+
+      - name: Build `pyinfra` Binary
+        run: pyinstaller scripts/pyinfra-pyinstaller.spec
