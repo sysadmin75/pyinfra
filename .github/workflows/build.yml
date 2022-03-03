@@ -1,4 +1,4 @@
-name: "Build `pyinfra` Binary"
+name: "Build pyinfra Binary"
 
 on:
   push:
@@ -33,5 +33,11 @@ jobs:
       - name: Install
         run: pip install '.[build]'
 
-      - name: Build `pyinfra` Binary
+      - name: Build pyinfra Binary
         run: pyinstaller scripts/pyinfra-pyinstaller.spec
+
+      - name: Upload pyinfra Binary Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: pyinfra-${{ matrix.os }}
+          path: dist/pyinfra
